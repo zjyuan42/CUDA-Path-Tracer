@@ -1,7 +1,17 @@
 set(headers
+    "common.h"
+    "cpu.h"
+    "naive.h"
+    "efficient.h"
+    "thrust.h"
     )
 
 set(sources
+    "common.cu"
+    "cpu.cu"
+    "naive.cu"
+    "efficient.cu"
+    "thrust.cu"
     )
 
 list(SORT headers)
@@ -11,8 +21,11 @@ source_group(Headers FILES ${headers})
 source_group(Sources FILES ${sources})
 
 add_library(stream_compaction ${sources} ${headers})
+target_include_directories(stream_compaction PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/.."
+)
 if(CMAKE_VERSION VERSION_LESS "3.23.0")
-    set_target_properties(stream_compaction} PROPERTIES CUDA_ARCHITECTURES OFF)
+    set_target_properties(stream_compaction PROPERTIES CUDA_ARCHITECTURES OFF)
 elseif(CMAKE_VERSION VERSION_LESS "3.24.0")
     set_target_properties(stream_compaction PROPERTIES CUDA_ARCHITECTURES all-major)
 else()
